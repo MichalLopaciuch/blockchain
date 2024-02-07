@@ -7,7 +7,7 @@
 
 class Blockchain {
 public:
-    void addBlock(const Block&) noexcept;
+    void add_block(const Block&) noexcept;
     std::vector<Block> get_chain() const noexcept;
 
     Blockchain();

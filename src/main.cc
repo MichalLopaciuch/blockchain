@@ -7,9 +7,11 @@ int main() {
     std::cout << "BLOCKCHAIN" << std::endl;
 
     auto blockchain = Blockchain();
-    auto b = Block(2, 10001, "DATA: 1", "");
-    blockchain.addBlock(b);
-    // blockchain.addBlock(Block{3, 10003, "DATA: 2", ""});
+
+    blockchain.add_block(Block{1001, "DATA: 1"});
+    blockchain.add_block(Block{1002, "DATA: 2"});
+    blockchain.add_block(Block{1003, "DATA: 3"});
+    blockchain.add_block(Block{1003, "DATA: 3"});
 
     for (auto block : blockchain.get_chain()) {
         std::cout << block.to_string() << std::endl;

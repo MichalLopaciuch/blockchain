@@ -12,6 +12,7 @@ public:
     [[nodiscard]] std::string digest() const;
     [[nodiscard]] std::string to_string() const noexcept;
 
+    Block(int, std::string);
     Block(int, int, std::string, std::string);
     ~Block() = default;
 private:

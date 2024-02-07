@@ -13,11 +13,11 @@ Block Blockchain::get_latest() const noexcept {
     return this->chain.back();
 }
 
-void Blockchain::addBlock(const Block& new_block) noexcept {
+void Blockchain::add_block(const Block& new_block) noexcept {
     auto block = std::move(new_block);
     block.set_index(this->chain.size());
     block.set_previous_hash(this->get_latest().get_hash());
-    block.set_hash(new_block.digest());
+    block.set_hash(block.digest());
     this->chain.push_back(block);
 }
 

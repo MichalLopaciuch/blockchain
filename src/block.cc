@@ -4,6 +4,11 @@
 #include <stdexcept>
 
 Block::Block(
+    int tstamp, std::string d)
+    : _index(-1), _timestamp(tstamp), _data(d), _previous_hash(""), _hash(this->digest()), _nonce(0) {
+}
+
+Block::Block(
     int idx, int tstamp, std::string d, std::string prev_hash)
     : _index(idx), _timestamp(tstamp), _data(d), _previous_hash(prev_hash), _hash(this->digest()), _nonce(0) {
 }
@@ -16,8 +21,7 @@ std::string Block::digest() const {
         + this->_previous_hash
         + std::to_string(this->_nonce);
 
-    unsigned char** digest;
-    unsigned int *digest_len;
+    unsigned char* digest;
     EVP_MD_CTX *mdctx;
 
     if((mdctx = EVP_MD_CTX_new()) == NULL) {
@@ -29,15 +33,17 @@ std::string Block::digest() const {
     if(1 != EVP_DigestUpdate(mdctx, CONTENT.c_str(), CONTENT.length())) {
         throw std::runtime_error("EVP_DigestUpdate");
     }
-    if((*digest = (unsigned char *)OPENSSL_malloc(EVP_MD_size(EVP_sha256()))) == NULL) {
+    if((digest = (unsigned char *)OPENSSL_malloc(EVP_MD_size(EVP_sha256()))) == NULL) {
         throw std::runtime_error("EVP_MD_size");
     }
-    if(1 != EVP_DigestFinal_ex(mdctx, *digest, digest_len)) {
+    if(1 != EVP_DigestFinal_ex(mdctx, digest, nullptr)) {
         throw std::runtime_error("EVP_DigestFinal_ex");
     }
     EVP_MD_CTX_free(mdctx);
+    auto digest_str = std::to_string(*digest);
+    OPENSSL_free(digest);
 
-    return std::to_string(3);
+    return digest_str;
 }
 
 std::string Block::get_hash() const noexcept {
